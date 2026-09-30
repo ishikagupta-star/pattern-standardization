@@ -175,11 +175,12 @@ img { display: block; }
   position: relative;
   height: 624px;
   overflow: hidden;
+  border-radius: var(--radius-large) var(--radius-large) 0 0;
   background:
     radial-gradient(480px 420px at 100% 100%, rgba(237, 27, 54, 0.35), transparent 70%),
     linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    var(--surface-primary-inverse-strongest);
+    var(--surface-primary-inverse-stronger);
   background-size: auto, 64px 64px, 64px 64px, auto;
 }
 .hero__content {

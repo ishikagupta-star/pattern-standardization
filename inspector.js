@@ -26,7 +26,7 @@
     // in place of (alongside) raw hex/px values once loaded. Hovers
     // before it resolves just show raw values; harmless, self-corrects
     // on the next hover.
-    var TOKENS = { colors: {}, spacing: {}, radius: {}, typography: [] };
+    var TOKENS = { surfaceColors: {}, textColors: {}, borderColors: {}, spacing: {}, radius: {}, typography: [] };
     if (SCRIPT_SRC) {
       fetch(new URL("tokens.json", SCRIPT_SRC).href)
         .then(function (r) { return r.ok ? r.json() : null; })
@@ -34,8 +34,20 @@
         .catch(function () {});
     }
 
-    function tokenForColor(hex) {
-      return TOKENS.colors[hex.toLowerCase()] || null;
+    // role: "surface" | "text" | "border" — the same hex can be a different
+    // named token depending on which CSS property it came from, so each
+    // role checks its own map (falling back across the others) rather than
+    // one flat map that can only remember a single name per hex.
+    function tokenForColor(hex, role) {
+      var h = hex.toLowerCase();
+      var order =
+        role === "text" ? [TOKENS.textColors, TOKENS.surfaceColors, TOKENS.borderColors] :
+        role === "border" ? [TOKENS.borderColors, TOKENS.surfaceColors, TOKENS.textColors] :
+        [TOKENS.surfaceColors, TOKENS.textColors, TOKENS.borderColors];
+      for (var i = 0; i < order.length; i++) {
+        if (order[i] && order[i][h]) return order[i][h];
+      }
+      return null;
     }
     function tokenForSpacing(px) {
       return TOKENS.spacing[String(Math.round(px))] || null;
@@ -226,12 +238,12 @@
       return '<strong>' + tokenName + '</strong> <span class="psi-row__dim">· ' + rawText + "</span>";
     }
 
-    function colorSwatchRow(label, cssColor) {
+    function colorSwatchRow(label, cssColor, role) {
       var c = parseColor(cssColor);
       if (!c || c.a === 0) return null;
       var hex = toHex(c);
       var alphaSuffix = c.a < 1 ? " · " + Math.round(c.a * 100) + "%" : "";
-      var token = tokenForColor(hex);
+      var token = tokenForColor(hex, role);
       var swatch = '<span class="psi-swatch" style="background:' + cssColor + '"></span>';
       return {
         label: label,
@@ -293,7 +305,7 @@
       if (!w) return null;
       var c = parseColor(cs.borderTopColor);
       var hex = c ? toHex(c).toUpperCase() : cs.borderTopColor;
-      var token = c ? tokenForColor(hex) : null;
+      var token = c ? tokenForColor(hex, "border") : null;
       return withToken(token, fmtPx(w) + " · " + cs.borderTopStyle + " · " + hex);
     }
 
@@ -328,11 +340,11 @@
       var border = borderSummary(cs);
       if (border) rows.push({ label: "Border", html: border });
 
-      var bg = colorSwatchRow("Background", cs.backgroundColor);
+      var bg = colorSwatchRow("Background", cs.backgroundColor, "surface");
       if (bg) rows.push({ label: bg.label, html: bg.html });
 
       if (hasDirectText(el)) {
-        var fg = colorSwatchRow("Text color", cs.color);
+        var fg = colorSwatchRow("Text color", cs.color, "text");
         if (fg) rows.push({ label: fg.label, html: fg.html });
         rows.push({ label: "Type", html: fontSummary(cs) });
       }
