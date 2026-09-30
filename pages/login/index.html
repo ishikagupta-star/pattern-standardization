@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Login — Choose an account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700&family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="../../inspector.css" />
+</head>
+<body>
+
+<div class="page">
+  <img class="bg-illustration" data-spec="Background illustration" src="assets/bg-illustration.png" alt="" />
+
+  <div class="login-card" data-spec="Login card">
+    <div class="login-card__header">
+      <h1 class="login-card__heading" data-spec="Heading">Choose an account</h1>
+      <div class="login-card__subtext" data-spec="Subtext">
+        <span class="login-card__subtext-label">to connect</span>
+        <div class="login-card__subtext-account">
+          <img src="assets/amazon-icon.png" alt="" />
+          <span>mahesh@gmail.com</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-card__body" data-spec="Card body (8px gap)">
+      <div class="login-card__section" data-spec="Account section (32px gap)">
+        <div class="account-row" data-spec="Selected account row">
+          <div class="avatar" data-spec="Avatar"><span>MS</span></div>
+          <div class="account-row__name">
+            <span class="account-row__name-primary">Mahesh Sridhar</span>
+            <span class="account-row__name-secondary">mahesh@gmail.com</span>
+          </div>
+        </div>
+
+        <div class="button-stack">
+          <button class="btn btn--primary" data-spec="Primary button">Continue with existing account</button>
+          <div class="divider-row" data-spec="Divider">
+            <span class="divider-row__line"></span>
+            <span class="divider-row__label">Or</span>
+            <span class="divider-row__line"></span>
+          </div>
+          <button class="btn btn--secondary" data-spec="Secondary button">Continue with different account</button>
+        </div>
+      </div>
+
+      <div class="footer-row" data-spec="Footer row">
+        <span class="footer-row__label">Want to connect to a new account?</span>
+        <button class="btn btn--link" data-spec="Link button (blue)">Create an account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../../inspector.js"></script>
+</body>
+</html>

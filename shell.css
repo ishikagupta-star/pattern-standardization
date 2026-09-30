@@ -1,0 +1,258 @@
+:root {
+  --shell-bg: #eceef2;
+  --shell-grid-line: #e2e4ea;
+  --shell-ink: #14151a;
+  --shell-muted: #6b6d7a;
+  --shell-accent: #6d5efc;
+  --shell-panel-bg: #ffffff;
+  --shell-border: #e3e4ea;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  background: var(--shell-bg);
+  background-image:
+    linear-gradient(var(--shell-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--shell-grid-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--shell-ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+button { font-family: inherit; }
+
+/* ===================== Top strip ===================== */
+
+.shell-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: rgba(236, 238, 242, 0.85);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--shell-border);
+}
+.shell-topbar__brand {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.shell-topbar__brand-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+}
+.shell-topbar__brand-tag {
+  font-size: 12px;
+  color: var(--shell-muted);
+}
+.shell-topbar__page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--shell-muted);
+}
+.shell-topbar__page strong {
+  color: var(--shell-ink);
+  font-weight: 600;
+}
+.shell-topbar__dim {
+  font-variant-numeric: tabular-nums;
+  color: var(--shell-muted);
+}
+
+/* ===================== Canvas stage ===================== */
+
+.shell-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px 120px;
+  min-height: calc(100vh - 57px);
+}
+
+.shell-canvas {
+  position: relative;
+  width: 1280px;
+  height: 764px;
+  max-width: 100%;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(20, 21, 26, 0.06), 0 24px 48px rgba(20, 21, 26, 0.12);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.shell-canvas iframe {
+  display: block;
+  width: 1280px;
+  height: 764px;
+  border: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+.shell-canvas iframe.is-loaded {
+  opacity: 1;
+}
+
+@media (max-width: 1340px) {
+  .shell-stage {
+    padding: 40px 16px 120px;
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+}
+
+/* ===================== Floating page switcher ===================== */
+
+.shell-fab {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 30;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--shell-ink);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(20, 21, 26, 0.28);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.shell-fab:hover {
+  transform: translateY(-2px);
+  background: var(--shell-accent);
+}
+.shell-fab svg {
+  width: 22px;
+  height: 22px;
+}
+
+.shell-panel {
+  position: fixed;
+  right: 28px;
+  bottom: 92px;
+  z-index: 30;
+  width: 280px;
+  max-height: min(60vh, 480px);
+  overflow-y: auto;
+  background: var(--shell-panel-bg);
+  border-radius: 14px;
+  border: 1px solid var(--shell-border);
+  box-shadow: 0 16px 40px rgba(20, 21, 26, 0.18);
+  transform-origin: bottom right;
+  transform: scale(0.94) translateY(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+.shell-panel.is-open {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+.shell-panel__header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--shell-border);
+}
+.shell-panel__title {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+.shell-panel__hint {
+  font-size: 11.5px;
+  color: var(--shell-muted);
+  margin: 0;
+}
+
+.shell-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.shell-panel__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--shell-ink);
+}
+.shell-panel__item:hover {
+  background: #f3f2ff;
+}
+.shell-panel__item.is-active {
+  background: var(--shell-ink);
+  color: #ffffff;
+}
+.shell-panel__item-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--shell-accent);
+  flex-shrink: 0;
+}
+.shell-panel__item.is-active .shell-panel__item-dot {
+  background: #ffffff;
+}
+.shell-panel__item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.shell-panel__item-title {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.shell-panel__item-subtitle {
+  font-size: 11px;
+  opacity: 0.65;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shell-panel__footer {
+  padding: 10px 16px 12px;
+  border-top: 1px solid var(--shell-border);
+}
+.shell-panel__footer p {
+  margin: 0;
+  font-size: 11px;
+  color: var(--shell-muted);
+  line-height: 1.5;
+}
+.shell-panel__footer code {
+  background: #f3f2ff;
+  color: var(--shell-accent);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 10.5px;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pattern Standardization</title>
+<link rel="stylesheet" href="shell.css" />
+</head>
+<body>
+
+<header class="shell-topbar">
+  <div class="shell-topbar__brand">
+    <span class="shell-topbar__brand-name">Pattern Standardization</span>
+    <span class="shell-topbar__brand-tag">design spec viewer</span>
+  </div>
+  <div class="shell-topbar__page">
+    <span>Viewing</span>
+    <strong id="pageTitle">—</strong>
+    <span class="shell-topbar__dim" id="pageDim">1280 × 764</span>
+  </div>
+</header>
+
+<main class="shell-stage">
+  <div class="shell-canvas">
+    <iframe id="stage" title="Page preview"></iframe>
+  </div>
+</main>
+
+<button class="shell-fab" id="fabToggle" aria-label="Switch page" aria-expanded="false">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="3" width="7" height="7" rx="1.5" fill="currentColor"/>
+    <rect x="14" y="3" width="7" height="7" rx="1.5" fill="currentColor"/>
+    <rect x="3" y="14" width="7" height="7" rx="1.5" fill="currentColor"/>
+    <rect x="14" y="14" width="7" height="7" rx="1.5" fill="currentColor"/>
+  </svg>
+</button>
+
+<div class="shell-panel" id="panel">
+  <div class="shell-panel__header">
+    <p class="shell-panel__title">Pages</p>
+    <p class="shell-panel__hint">Hover anything on the canvas to see its specs.</p>
+  </div>
+  <ul class="shell-panel__list" id="panelList"></ul>
+  <div class="shell-panel__footer">
+    <p>To add a page: drop its folder in <code>pages/</code> and add one entry to <code>pages.json</code>.</p>
+  </div>
+</div>
+
+<script src="shell.js"></script>
+</body>
+</html>

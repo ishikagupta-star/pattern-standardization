@@ -1,0 +1,8 @@
+[
+  {
+    "id": "login",
+    "title": "Login",
+    "subtitle": "Choose an account",
+    "path": "pages/login/index.html"
+  }
+]
