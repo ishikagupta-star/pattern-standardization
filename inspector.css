@@ -78,6 +78,14 @@
   font-variant-numeric: tabular-nums;
   word-break: break-word;
 }
+.psi-row__value strong {
+  font-weight: 700;
+  color: #ffffff;
+}
+.psi-row__dim {
+  color: #9a9aad;
+  font-weight: 400;
+}
 
 .psi-swatch {
   display: inline-block;

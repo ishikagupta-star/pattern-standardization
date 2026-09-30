@@ -7,6 +7,11 @@
 (function () {
   "use strict";
 
+  // document.currentScript is only valid synchronously during this initial
+  // run, so grab it now — used below to find tokens.json next to this
+  // script regardless of how deep the page including it is nested.
+  var SCRIPT_SRC = document.currentScript && document.currentScript.src;
+
   function ready(fn) {
     if (document.readyState !== "loading") fn();
     else document.addEventListener("DOMContentLoaded", fn);
@@ -16,6 +21,40 @@
     var tooltip = document.createElement("div");
     tooltip.className = "psi-tooltip";
     document.body.appendChild(tooltip);
+
+    // Tarmac Design System token dictionary — resolved names are shown
+    // in place of (alongside) raw hex/px values once loaded. Hovers
+    // before it resolves just show raw values; harmless, self-corrects
+    // on the next hover.
+    var TOKENS = { colors: {}, spacing: {}, radius: {}, typography: [] };
+    if (SCRIPT_SRC) {
+      fetch(new URL("tokens.json", SCRIPT_SRC).href)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) { if (data) TOKENS = data; })
+        .catch(function () {});
+    }
+
+    function tokenForColor(hex) {
+      return TOKENS.colors[hex.toLowerCase()] || null;
+    }
+    function tokenForSpacing(px) {
+      return TOKENS.spacing[String(Math.round(px))] || null;
+    }
+    function tokenForRadius(px) {
+      return TOKENS.radius[String(Math.round(px))] || null;
+    }
+    function tokenForType(family, weight, size, line) {
+      var fam = family.toLowerCase().trim();
+      var match = TOKENS.typography.find(function (t) {
+        return (
+          t.family === fam &&
+          String(t.weight) === String(weight) &&
+          t.size === Math.round(size) &&
+          t.line === Math.round(line)
+        );
+      });
+      return match ? match.name : null;
+    }
 
     var nameEl = document.createElement("p");
     nameEl.className = "psi-tooltip__name";
@@ -179,19 +218,24 @@
       return "#" + h(c.r) + h(c.g) + h(c.b);
     }
 
+    // Wraps a raw value with its Tarmac token name when one resolves, as
+    // "TokenName · raw value" — the name is what the ask was for; the raw
+    // value stays alongside since engineers still need the literal number.
+    function withToken(tokenName, rawText) {
+      if (!tokenName) return rawText;
+      return '<strong>' + tokenName + '</strong> <span class="psi-row__dim">· ' + rawText + "</span>";
+    }
+
     function colorSwatchRow(label, cssColor) {
       var c = parseColor(cssColor);
       if (!c || c.a === 0) return null;
       var hex = toHex(c);
       var alphaSuffix = c.a < 1 ? " · " + Math.round(c.a * 100) + "%" : "";
+      var token = tokenForColor(hex);
+      var swatch = '<span class="psi-swatch" style="background:' + cssColor + '"></span>';
       return {
         label: label,
-        html:
-          '<span class="psi-swatch" style="background:' +
-          cssColor +
-          '"></span>' +
-          hex.toUpperCase() +
-          alphaSuffix,
+        html: swatch + withToken(token, hex.toUpperCase() + alphaSuffix),
       };
     }
 
@@ -205,7 +249,9 @@
         b = parseFloat(cs.paddingBottom),
         l = parseFloat(cs.paddingLeft);
       if (t === 0 && r === 0 && b === 0 && l === 0) return null;
-      if (t === r && r === b && b === l) return fmtPx(t) + " all sides";
+      if (t === r && r === b && b === l) {
+        return withToken(tokenForSpacing(t), fmtPx(t) + " all sides");
+      }
       if (t === b && r === l) return fmtPx(t) + " / " + fmtPx(r);
       return fmtPx(t) + " " + fmtPx(r) + " " + fmtPx(b) + " " + fmtPx(l);
     }
@@ -216,7 +262,7 @@
       var rg = parseFloat(cs.rowGap) || 0;
       var cg = parseFloat(cs.columnGap) || 0;
       if (rg === 0 && cg === 0) return null;
-      if (rg === cg) return fmtPx(rg);
+      if (rg === cg) return withToken(tokenForSpacing(rg), fmtPx(rg));
       return fmtPx(rg) + " row / " + fmtPx(cg) + " col";
     }
 
@@ -232,11 +278,14 @@
       var family = cs.fontFamily.split(",")[0].replace(/["']/g, "").trim();
       var weightNames = { "400": "Regular", "500": "Medium", "600": "Semibold", "700": "Bold", "300": "Light" };
       var weight = weightNames[cs.fontWeight] || cs.fontWeight;
-      var size = fmtPx(parseFloat(cs.fontSize));
-      var lh = cs.lineHeight === "normal" ? "normal" : fmtPx(parseFloat(cs.lineHeight));
+      var sizePx = parseFloat(cs.fontSize);
+      var linePx = cs.lineHeight === "normal" ? sizePx * 1.2 : parseFloat(cs.lineHeight);
+      var lhText = cs.lineHeight === "normal" ? "normal" : fmtPx(linePx);
       var ls = parseFloat(cs.letterSpacing);
       var extra = ls && !isNaN(ls) && Math.abs(ls) > 0.05 ? " · " + round(ls) + "px tracking" : "";
-      return family + " · " + weight + " · " + size + "/" + lh + extra;
+      var raw = family + " · " + weight + " · " + fmtPx(sizePx) + "/" + lhText + extra;
+      var token = tokenForType(family, cs.fontWeight, sizePx, linePx);
+      return withToken(token, raw);
     }
 
     function borderSummary(cs) {
@@ -244,7 +293,8 @@
       if (!w) return null;
       var c = parseColor(cs.borderTopColor);
       var hex = c ? toHex(c).toUpperCase() : cs.borderTopColor;
-      return fmtPx(w) + " · " + cs.borderTopStyle + " · " + hex;
+      var token = c ? tokenForColor(hex) : null;
+      return withToken(token, fmtPx(w) + " · " + cs.borderTopStyle + " · " + hex);
     }
 
     function radiusSummary(cs) {
@@ -252,8 +302,9 @@
       if (!v) return null;
       var all = [cs.borderTopLeftRadius, cs.borderTopRightRadius, cs.borderBottomRightRadius, cs.borderBottomLeftRadius];
       var uniform = all.every(function (x) { return x === all[0]; });
-      if (v >= 999) return "full (pill)";
-      return uniform ? fmtPx(v) : all.map(function (x) { return fmtPx(parseFloat(x)); }).join(" / ");
+      if (!uniform) return all.map(function (x) { return fmtPx(parseFloat(x)); }).join(" / ");
+      var token = tokenForRadius(v) || (v >= 999 ? "Radius/Max" : null);
+      return withToken(token, v >= 999 ? "full (pill)" : fmtPx(v));
     }
 
     // ---- build + show tooltip ----------------------------------------------
@@ -266,16 +317,16 @@
       rows.push({ label: "Size", value: round(rect.width) + " × " + round(rect.height) });
 
       var pad = paddingSummary(cs);
-      if (pad) rows.push({ label: "Padding", value: pad });
+      if (pad) rows.push({ label: "Padding", html: pad });
 
       var gap = gapSummary(cs);
-      if (gap) rows.push({ label: "Gap", value: gap });
+      if (gap) rows.push({ label: "Gap", html: gap });
 
       var radius = radiusSummary(cs);
-      if (radius) rows.push({ label: "Radius", value: radius });
+      if (radius) rows.push({ label: "Radius", html: radius });
 
       var border = borderSummary(cs);
-      if (border) rows.push({ label: "Border", value: border });
+      if (border) rows.push({ label: "Border", html: border });
 
       var bg = colorSwatchRow("Background", cs.backgroundColor);
       if (bg) rows.push({ label: bg.label, html: bg.html });
@@ -283,7 +334,7 @@
       if (hasDirectText(el)) {
         var fg = colorSwatchRow("Text color", cs.color);
         if (fg) rows.push({ label: fg.label, html: fg.html });
-        rows.push({ label: "Type", value: fontSummary(cs) });
+        rows.push({ label: "Type", html: fontSummary(cs) });
       }
 
       var shadow = cs.boxShadow;
