@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Delhivery Local</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="../../inspector.css" />
+</head>
+<body>
+
+<div class="page">
+
+  <header class="topnav" data-spec="Top navigation bar">
+    <div class="topnav__brand">
+      <img class="logo-dlv" src="assets/dlv.svg" alt="Delhivery" />
+      <img class="logo-one" src="assets/group1991.svg" alt="One" />
+    </div>
+    <div class="search" data-spec="Search field">
+      <img src="assets/search.svg" alt="" />
+      <span>Search</span>
+    </div>
+    <div class="topnav__actions">
+      <button class="icon-btn" data-spec="Help button"><img src="assets/helpOutline.svg" alt="" /></button>
+    </div>
+    <div class="profile" data-spec="Profile">
+      <div class="avatar">
+        <div class="avatar__circle">JS</div>
+        <img class="avatar__status" src="assets/avatarStatus.svg" alt="" />
+      </div>
+      <div class="profile__meta">
+        <span class="profile__name">Jhonathan Smith</span>
+        <span class="profile__tag">B2C Express Parcel</span>
+      </div>
+      <img class="chevron" src="assets/chevronDown.svg" alt="" />
+    </div>
+  </header>
+
+  <div class="body">
+    <nav class="sidenav" data-spec="Left navigation sidebar">
+      <button class="nav-cell" aria-label="Home"><img src="assets/navHome.svg" alt="" /></button>
+      <button class="nav-cell" aria-label="Edit"><img src="assets/navBoxEdit.svg" alt="" /></button>
+      <button class="nav-cell" aria-label="Delivery"><img src="assets/navMoped.svg" alt="" /></button>
+      <button class="nav-cell" aria-label="Docs"><img src="assets/navMenuBook.svg" alt="" /></button>
+      <button class="nav-cell is-selected" aria-current="page" aria-label="Services"><img src="assets/navReportProblem.svg" alt="" /></button>
+      <button class="nav-cell" aria-label="Billing"><img src="assets/navMonetization.svg" alt="" /></button>
+      <button class="nav-cell" aria-label="Support"><img src="assets/navHeadsetMic.svg" alt="" /></button>
+      <button class="nav-cell" aria-label="Balance"><img src="assets/navBalance.svg" alt="" /></button>
+      <button class="nav-cell" aria-label="Description"><img src="assets/navDescription.svg" alt="" /></button>
+      <button class="nav-cell" aria-label="Exposure"><img src="assets/navExposure.svg" alt="" /></button>
+      <div class="sidenav__bottom">
+        <button class="nav-cell" aria-label="Info"><img src="assets/navInfo.svg" alt="" /></button>
+        <button class="nav-cell" aria-label="Device hub"><img src="assets/navDeviceHub.svg" alt="" /></button>
+        <button class="nav-cell" aria-label="Settings"><img src="assets/navSettings.svg" alt="" /></button>
+      </div>
+    </nav>
+
+    <main class="content">
+
+      <nav class="breadcrumb" data-spec="Breadcrumb">
+        <button class="breadcrumb__cell">Services</button>
+        <span class="breadcrumb__divider"><img src="assets/breadcrumbDivider.svg" alt="" /></span>
+        <span class="breadcrumb__cell is-current">Delhivery Local</span>
+      </nav>
+
+      <section class="hero" data-spec="Hero section">
+        <div class="hero__content">
+          <span class="hero__badge" data-spec="Pricing badge">Starting at ₹40</span>
+          <div class="hero__value-prop">
+            <h1 class="hero__headline" data-spec="Hero headline">Delhivery Local</h1>
+            <p class="hero__desc" data-spec="Hero description">Book on-demand bikes, three-wheelers, and trucks for fast, reliable same-city deliveries across major cities in India</p>
+          </div>
+          <div class="hero__actions">
+            <button class="btn btn--white-primary" data-spec="Primary button (white)">Activate now</button>
+            <button class="btn btn--white-secondary" data-spec="Secondary button (white)">View benefits</button>
+          </div>
+        </div>
+        <img class="hero__imagery" data-spec="Hero device mockup" src="assets/heroImagery.png" alt="Delhivery Local app preview" />
+      </section>
+
+      <section class="benefits" data-spec="Benefits section (48px padding)">
+        <h2 class="benefits__heading" data-spec="Benefits heading">Find everything you need to manage <span class="accent">Intracity deliveries</span></h2>
+        <div class="benefits__row">
+          <article class="benefit-card benefit-card--dark" data-spec="Benefit card (dark)">
+            <div class="benefit-card__illustration"><img src="assets/benefit1.png" alt="Instant on-demand pickups" /></div>
+            <div class="benefit-card__text">
+              <p class="benefit-card__title">Instant on-demand pickups</p>
+              <p class="benefit-card__desc">Instantly book bikes, three-wheelers, and commercial vehicles for on-demand deliveries.</p>
+            </div>
+          </article>
+          <article class="benefit-card benefit-card--light" data-spec="Benefit card (light)">
+            <div class="benefit-card__illustration"><img src="assets/benefit2.png" alt="Centralised Billing & Invoicing" /></div>
+            <div class="benefit-card__text">
+              <p class="benefit-card__title">Centralised Billing &amp; Invoicing</p>
+              <p class="benefit-card__desc">Manage a single wallet &amp; receive one consolidated invoice for all local deliveries.</p>
+            </div>
+          </article>
+          <article class="benefit-card benefit-card--light" data-spec="Benefit card (light)">
+            <div class="benefit-card__illustration"><img src="assets/benefit3.png" alt="Multi-user access" /></div>
+            <div class="benefit-card__text">
+              <p class="benefit-card__title">Multi-user access</p>
+              <p class="benefit-card__desc">Invite team members and manage access with role-based permissions.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="footer-section" data-spec="Steps & footer section (48px padding)">
+        <div class="footer-section__row">
+          <div class="carousel" data-spec="Step preview carousel">
+            <div class="carousel__card"><img src="assets/carousel.png" alt="Step 1 preview" /></div>
+            <div class="carousel__dots">
+              <span class="carousel__dot is-active"></span>
+              <span class="carousel__dot"></span>
+              <span class="carousel__dot"></span>
+            </div>
+          </div>
+
+          <div class="steps">
+            <div class="steps__intro">
+              <p class="steps__label">How it works?</p>
+              <h2 class="steps__heading" data-spec="Steps heading"><span class="accent">Three steps</span> to get started</h2>
+            </div>
+            <div class="steps__list">
+              <div class="step-row" data-spec="Step row">
+                <span class="step-row__number">01</span>
+                <p class="step-row__text">Set up your team in minutes</p>
+              </div>
+              <div class="step-row" data-spec="Step row">
+                <span class="step-row__number">02</span>
+                <p class="step-row__text">Start delivering instantly in Delhivery app</p>
+              </div>
+              <div class="step-row" data-spec="Step row">
+                <span class="step-row__number">03</span>
+                <p class="step-row__text">Monitor all orders and payments in real time</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="../../inspector.js"></script>
+</body>
+</html>

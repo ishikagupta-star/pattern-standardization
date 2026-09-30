@@ -4,5 +4,11 @@
     "title": "Login",
     "subtitle": "Choose an account",
     "path": "pages/login/index.html"
+  },
+  {
+    "id": "delhivery-local",
+    "title": "Delhivery Local",
+    "subtitle": "Landing page",
+    "path": "pages/delhivery-local/index.html"
   }
 ]
