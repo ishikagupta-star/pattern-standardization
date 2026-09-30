@@ -123,7 +123,21 @@ img { display: block; }
   display: flex; align-items: center; justify-content: center;
   padding: 8px 12px; border-radius: 12px;
 }
-.nav-cell img { width: 20px; height: 20px; }
+/* Several of the exported icon SVGs carry a baked-in fill meant for a dark
+   surface (#E6E6E6), which is invisible on this light sidebar. Rendering
+   every icon as a CSS mask instead of a plain <img> ignores the source
+   file's own fill entirely and guarantees one consistent, correct color —
+   matching the icons that already happened to export with a dark fill. */
+.nav-icon {
+  width: 20px; height: 20px;
+  background-color: #343c51; /* Icon/Coal/Primary */
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
 .nav-cell.is-selected { background: var(--surface-coal-subtle); }
 .sidenav__bottom { display: flex; flex-direction: column; gap: 8px; flex: 1 0 0; justify-content: flex-end; }
 
@@ -148,8 +162,12 @@ img { display: block; }
   font-weight: 300;
   color: var(--text-heading-primary);
 }
-.breadcrumb__divider { width: 8px; height: 44px; display: flex; align-items: center; justify-content: center; }
-.breadcrumb__divider img { width: 8px; height: 18px; }
+.breadcrumb__divider { width: 8px; height: 44px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+/* The source asset is a 20×0.5px horizontal line rotated -67.61deg to read
+   as a short diagonal slash (~7.6×18.5px). Stretching it to fill an 18px
+   box (as a plain <img> would) turns the hairline into a solid block —
+   keep its native size and rotate it instead. */
+.breadcrumb__divider img { width: 20px; height: 0.5px; transform: rotate(-67.61deg); }
 
 /* ===================== Hero ===================== */
 
