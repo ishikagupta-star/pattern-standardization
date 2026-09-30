@@ -23,6 +23,67 @@
     tooltip.appendChild(nameEl);
     tooltip.appendChild(listEl);
 
+    // Four padding bands (top/right/bottom/left), reused across hovers and
+    // repositioned live to match whatever element is currently hovered —
+    // draws the padding directly on the element itself, not just as a
+    // number in the tooltip.
+    var padSides = ["top", "right", "bottom", "left"];
+    var padBands = {};
+    padSides.forEach(function (side) {
+      var band = document.createElement("div");
+      band.className = "psi-pad-band";
+      var label = document.createElement("span");
+      label.className = "psi-pad-band__label";
+      band.appendChild(label);
+      document.body.appendChild(band);
+      padBands[side] = { el: band, label: label };
+    });
+
+    function hidePadBands() {
+      padSides.forEach(function (side) {
+        padBands[side].el.style.display = "none";
+      });
+    }
+
+    function updatePadBands(el, cs, rect) {
+      var bt = parseFloat(cs.borderTopWidth) || 0;
+      var br = parseFloat(cs.borderRightWidth) || 0;
+      var bb = parseFloat(cs.borderBottomWidth) || 0;
+      var bl = parseFloat(cs.borderLeftWidth) || 0;
+      var pt = parseFloat(cs.paddingTop) || 0;
+      var pr = parseFloat(cs.paddingRight) || 0;
+      var pb = parseFloat(cs.paddingBottom) || 0;
+      var pl = parseFloat(cs.paddingLeft) || 0;
+
+      var innerLeft = rect.left + bl;
+      var innerTop = rect.top + bt;
+      var innerRight = rect.right - br;
+      var innerBottom = rect.bottom - bb;
+      var innerWidth = Math.max(0, innerRight - innerLeft);
+
+      var bands = {
+        top: pt > 0 ? { x: innerLeft, y: innerTop, w: innerWidth, h: pt, value: pt } : null,
+        bottom: pb > 0 ? { x: innerLeft, y: innerBottom - pb, w: innerWidth, h: pb, value: pb } : null,
+        left: pl > 0 ? { x: innerLeft, y: innerTop + pt, w: pl, h: Math.max(0, innerBottom - pb - (innerTop + pt)), value: pl } : null,
+        right: pr > 0 ? { x: innerRight - pr, y: innerTop + pt, w: pr, h: Math.max(0, innerBottom - pb - (innerTop + pt)), value: pr } : null,
+      };
+
+      padSides.forEach(function (side) {
+        var b = bands[side];
+        var band = padBands[side];
+        if (!b || b.w <= 0 || b.h <= 0) {
+          band.el.style.display = "none";
+          return;
+        }
+        band.el.style.display = "flex";
+        band.el.style.left = b.x + "px";
+        band.el.style.top = b.y + "px";
+        band.el.style.width = b.w + "px";
+        band.el.style.height = b.h + "px";
+        band.label.textContent = Math.round(b.value * 10) / 10;
+      });
+    }
+
     var current = null;
 
     // ---- formatting helpers ----------------------------------------------
@@ -163,6 +224,7 @@
       var name = el.getAttribute("data-spec") || el.tagName.toLowerCase();
       nameEl.textContent = name;
       listEl.innerHTML = "";
+      updatePadBands(el, getComputedStyle(el), el.getBoundingClientRect());
       var rows = buildRows(el);
       rows.forEach(function (r) {
         var rowEl = document.createElement("div");
@@ -193,6 +255,7 @@
 
     function hide() {
       tooltip.classList.remove("is-visible");
+      hidePadBands();
       if (current) current.classList.remove("psi-active");
       current = null;
     }

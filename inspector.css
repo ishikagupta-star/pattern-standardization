@@ -88,3 +88,32 @@
   margin-right: 5px;
   vertical-align: -1px;
 }
+
+/* ==========================================================================
+   Padding bands — drawn directly on the hovered element's padding area,
+   like Figma's dev-mode inspector, in addition to the numbers in the
+   tooltip list.
+   ========================================================================== */
+
+.psi-pad-band {
+  position: fixed;
+  z-index: 2147482900;
+  background: rgba(109, 94, 252, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(109, 94, 252, 0.35);
+  pointer-events: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.psi-pad-band__label {
+  background: #6d5efc;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
