@@ -117,3 +117,33 @@
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
+
+/* ==========================================================================
+   Gap bands — the space BETWEEN two sibling elements inside a hovered
+   flex container (as opposed to padding bands, which are the space
+   INSIDE one element). Same mechanic, a different hue so the two read
+   as distinct at a glance.
+   ========================================================================== */
+
+.psi-gap-band {
+  position: fixed;
+  z-index: 2147482900;
+  background: rgba(15, 184, 160, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(15, 184, 160, 0.4);
+  pointer-events: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.psi-gap-band__label {
+  background: #0fb8a0;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}

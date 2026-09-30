@@ -84,6 +84,80 @@
       });
     }
 
+    // Gap bands — the space BETWEEN a hovered container's direct children
+    // (as opposed to padding bands, which are the space inside one
+    // element). Pooled and reused since a container can have any number
+    // of children/gaps.
+    var gapBandPool = [];
+    function getGapBand(i) {
+      if (!gapBandPool[i]) {
+        var band = document.createElement("div");
+        band.className = "psi-gap-band";
+        var label = document.createElement("span");
+        label.className = "psi-gap-band__label";
+        band.appendChild(label);
+        document.body.appendChild(band);
+        gapBandPool[i] = { el: band, label: label };
+      }
+      return gapBandPool[i];
+    }
+    function hideGapBands() {
+      gapBandPool.forEach(function (b) { b.el.style.display = "none"; });
+    }
+
+    function updateGapBands(el, cs, rect) {
+      hideGapBands();
+      var display = cs.display;
+      if (display.indexOf("flex") === -1) return; // grid support can follow the same pattern later
+      var direction = cs.flexDirection || "row";
+      var isColumn = direction.indexOf("column") !== -1;
+      var gapValue = isColumn ? parseFloat(cs.rowGap) || 0 : parseFloat(cs.columnGap) || 0;
+      if (gapValue <= 0) return;
+
+      var bt = parseFloat(cs.borderTopWidth) || 0;
+      var br = parseFloat(cs.borderRightWidth) || 0;
+      var bb = parseFloat(cs.borderBottomWidth) || 0;
+      var bl = parseFloat(cs.borderLeftWidth) || 0;
+      var pt = parseFloat(cs.paddingTop) || 0;
+      var pr = parseFloat(cs.paddingRight) || 0;
+      var pb = parseFloat(cs.paddingBottom) || 0;
+      var pl = parseFloat(cs.paddingLeft) || 0;
+      var innerLeft = rect.left + bl + pl;
+      var innerRight = rect.right - br - pr;
+      var innerTop = rect.top + bt + pt;
+      var innerBottom = rect.bottom - bb - pb;
+
+      var children = Array.prototype.filter.call(el.children, function (c) {
+        var r = c.getBoundingClientRect();
+        return r.width > 0 && r.height > 0;
+      });
+
+      var bandIndex = 0;
+      for (var i = 0; i < children.length - 1; i++) {
+        var a = children[i].getBoundingClientRect();
+        var b = children[i + 1].getBoundingClientRect();
+        var rectSpec;
+        if (isColumn) {
+          var gapTop = a.bottom;
+          var gapBottom = b.top;
+          if (gapBottom - gapTop <= 0) continue;
+          rectSpec = { x: innerLeft, y: gapTop, w: Math.max(0, innerRight - innerLeft), h: gapBottom - gapTop };
+        } else {
+          var gapLeft = a.right;
+          var gapRight = b.left;
+          if (gapRight - gapLeft <= 0) continue;
+          rectSpec = { x: gapLeft, y: innerTop, w: gapRight - gapLeft, h: Math.max(0, innerBottom - innerTop) };
+        }
+        var band = getGapBand(bandIndex++);
+        band.el.style.display = "flex";
+        band.el.style.left = rectSpec.x + "px";
+        band.el.style.top = rectSpec.y + "px";
+        band.el.style.width = rectSpec.w + "px";
+        band.el.style.height = rectSpec.h + "px";
+        band.label.textContent = Math.round(gapValue * 10) / 10;
+      }
+    }
+
     var current = null;
 
     // ---- formatting helpers ----------------------------------------------
@@ -224,7 +298,10 @@
       var name = el.getAttribute("data-spec") || el.tagName.toLowerCase();
       nameEl.textContent = name;
       listEl.innerHTML = "";
-      updatePadBands(el, getComputedStyle(el), el.getBoundingClientRect());
+      var cs = getComputedStyle(el);
+      var rect = el.getBoundingClientRect();
+      updatePadBands(el, cs, rect);
+      updateGapBands(el, cs, rect);
       var rows = buildRows(el);
       rows.forEach(function (r) {
         var rowEl = document.createElement("div");
@@ -256,6 +333,7 @@
     function hide() {
       tooltip.classList.remove("is-visible");
       hidePadBands();
+      hideGapBands();
       if (current) current.classList.remove("psi-active");
       current = null;
     }
