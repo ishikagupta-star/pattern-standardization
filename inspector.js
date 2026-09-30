@@ -26,7 +26,7 @@
     // in place of (alongside) raw hex/px values once loaded. Hovers
     // before it resolves just show raw values; harmless, self-corrects
     // on the next hover.
-    var TOKENS = { surfaceColors: {}, textColors: {}, borderColors: {}, spacing: {}, radius: {}, typography: [] };
+    var TOKENS = { surfaceColors: {}, textColors: {}, borderColors: {}, spacing: {}, radius: {}, typography: [], tdsFileKey: null, tdsComponents: {} };
     if (SCRIPT_SRC) {
       fetch(new URL("tokens.json", SCRIPT_SRC).href)
         .then(function (r) { return r.ok ? r.json() : null; })
@@ -71,8 +71,28 @@
     var nameEl = document.createElement("p");
     nameEl.className = "psi-tooltip__name";
     var listEl = document.createElement("div");
+    var figmaHintEl = document.createElement("p");
+    figmaHintEl.className = "psi-tooltip__figma-hint";
     tooltip.appendChild(nameEl);
     tooltip.appendChild(listEl);
+    tooltip.appendChild(figmaHintEl);
+
+    // If the hovered element is tagged with a literal Tarmac component name
+    // (data-tds-component="Card Blocks" etc.), clicking it opens that
+    // component's MASTER definition directly in the 🟥 TDS library file —
+    // looked up by name in tokens.json, not a per-instance node id, so any
+    // element anywhere just needs the name to link correctly. Hover only
+    // shows the name; navigating away on hover alone would be surprising,
+    // so the click is the deliberate step.
+    var currentFigmaUrl = null;
+
+    function figmaUrlFor(el) {
+      var component = el.getAttribute("data-tds-component");
+      var fileKey = TOKENS.tdsFileKey;
+      var nodeId = component && TOKENS.tdsComponents[component];
+      if (!fileKey || !nodeId) return null;
+      return "https://www.figma.com/design/" + fileKey + "/?node-id=" + nodeId.replace(":", "-");
+    }
 
     // Four padding bands (top/right/bottom/left), reused across hovers and
     // repositioned live to match whatever element is currently hovered —
@@ -394,7 +414,17 @@
 
     function render(el) {
       var name = el.getAttribute("data-spec") || el.tagName.toLowerCase();
-      nameEl.textContent = name;
+      var component = el.getAttribute("data-tds-component");
+      nameEl.textContent = component ? name + " · " + component : name;
+
+      currentFigmaUrl = figmaUrlFor(el);
+      if (currentFigmaUrl) {
+        figmaHintEl.textContent = "Click to open “" + component + "” in Figma ↗";
+        figmaHintEl.style.display = "block";
+      } else {
+        figmaHintEl.style.display = "none";
+      }
+
       listEl.innerHTML = "";
       var cs = getComputedStyle(el);
       var rect = el.getBoundingClientRect();
@@ -434,6 +464,8 @@
       hideGapBands();
       if (current) current.classList.remove("psi-active");
       current = null;
+      currentFigmaUrl = null;
+      document.body.style.cursor = "";
     }
 
     document.addEventListener("mousemove", function (e) {
@@ -455,9 +487,16 @@
       } else {
         position(e.clientX, e.clientY);
       }
+      document.body.style.cursor = currentFigmaUrl ? "pointer" : "";
     });
 
     document.addEventListener("mouseleave", hide);
+
+    document.addEventListener("click", function (e) {
+      if (!current || !currentFigmaUrl) return;
+      if (!current.contains(e.target)) return;
+      window.open(currentFigmaUrl, "_blank", "noopener");
+    });
 
     // Let the parent shell (if this page is embedded in an iframe) know
     // this page is ready, so it can fade out any loading state.
