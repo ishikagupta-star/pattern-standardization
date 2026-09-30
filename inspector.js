@@ -159,54 +159,89 @@
     function updateGapBands(el, cs, rect) {
       hideGapBands();
       var display = cs.display;
-      if (display.indexOf("flex") === -1) return; // grid support can follow the same pattern later
-      var direction = cs.flexDirection || "row";
-      var isColumn = direction.indexOf("column") !== -1;
-      var gapValue = isColumn ? parseFloat(cs.rowGap) || 0 : parseFloat(cs.columnGap) || 0;
-      if (gapValue <= 0) return;
+      var isGrid = display.indexOf("grid") !== -1;
+      var isFlex = display.indexOf("flex") !== -1;
+      if (!isGrid && !isFlex) return;
 
-      var bt = parseFloat(cs.borderTopWidth) || 0;
-      var br = parseFloat(cs.borderRightWidth) || 0;
-      var bb = parseFloat(cs.borderBottomWidth) || 0;
-      var bl = parseFloat(cs.borderLeftWidth) || 0;
-      var pt = parseFloat(cs.paddingTop) || 0;
-      var pr = parseFloat(cs.paddingRight) || 0;
-      var pb = parseFloat(cs.paddingBottom) || 0;
-      var pl = parseFloat(cs.paddingLeft) || 0;
-      var innerLeft = rect.left + bl + pl;
-      var innerRight = rect.right - br - pr;
-      var innerTop = rect.top + bt + pt;
-      var innerBottom = rect.bottom - bb - pb;
+      var innerLeft = rect.left + (parseFloat(cs.borderLeftWidth) || 0) + (parseFloat(cs.paddingLeft) || 0);
+      var innerRight = rect.right - (parseFloat(cs.borderRightWidth) || 0) - (parseFloat(cs.paddingRight) || 0);
+      var innerTop = rect.top + (parseFloat(cs.borderTopWidth) || 0) + (parseFloat(cs.paddingTop) || 0);
+      var innerBottom = rect.bottom - (parseFloat(cs.borderBottomWidth) || 0) - (parseFloat(cs.paddingBottom) || 0);
 
       var children = Array.prototype.filter.call(el.children, function (c) {
         var r = c.getBoundingClientRect();
         return r.width > 0 && r.height > 0;
       });
+      if (children.length < 2) return;
 
-      var bandIndex = 0;
-      for (var i = 0; i < children.length - 1; i++) {
-        var a = children[i].getBoundingClientRect();
-        var b = children[i + 1].getBoundingClientRect();
-        var rectSpec;
-        if (isColumn) {
-          var gapTop = a.bottom;
-          var gapBottom = b.top;
-          if (gapBottom - gapTop <= 0) continue;
-          rectSpec = { x: innerLeft, y: gapTop, w: Math.max(0, innerRight - innerLeft), h: gapBottom - gapTop };
-        } else {
-          var gapLeft = a.right;
-          var gapRight = b.left;
-          if (gapRight - gapLeft <= 0) continue;
-          rectSpec = { x: gapLeft, y: innerTop, w: gapRight - gapLeft, h: Math.max(0, innerBottom - innerTop) };
+      // Collect every gap rectangle to draw, from whichever layout mode.
+      var bands = [];
+
+      if (isGrid) {
+        var colGap = parseFloat(cs.columnGap) || 0;
+        var rowGap = parseFloat(cs.rowGap) || 0;
+        // Column count from the computed track list ("406px 406px 406px" -> 3).
+        var numCols = (cs.gridTemplateColumns || "").trim().split(/\s+/).filter(Boolean).length || 1;
+        var numRows = Math.ceil(children.length / numCols);
+
+        if (colGap > 0) {
+          for (var row = 0; row < numRows; row++) {
+            for (var col = 0; col < numCols - 1; col++) {
+              var ia = row * numCols + col;
+              var ib = ia + 1;
+              if (ib >= children.length) continue;
+              var ga = children[ia].getBoundingClientRect();
+              var gb = children[ib].getBoundingClientRect();
+              var w = gb.left - ga.right;
+              if (w <= 0) continue;
+              bands.push({ x: ga.right, y: ga.top, w: w, h: ga.height, value: colGap });
+            }
+          }
         }
-        var band = getGapBand(bandIndex++);
-        band.el.style.display = "flex";
-        band.el.style.left = rectSpec.x + "px";
-        band.el.style.top = rectSpec.y + "px";
-        band.el.style.width = rectSpec.w + "px";
-        band.el.style.height = rectSpec.h + "px";
-        band.label.textContent = Math.round(gapValue * 10) / 10;
+        if (rowGap > 0) {
+          for (var col2 = 0; col2 < numCols; col2++) {
+            for (var row2 = 0; row2 < numRows - 1; row2++) {
+              var ja = row2 * numCols + col2;
+              var jb = ja + numCols;
+              if (jb >= children.length) continue;
+              var ra = children[ja].getBoundingClientRect();
+              var rb = children[jb].getBoundingClientRect();
+              var h2 = rb.top - ra.bottom;
+              if (h2 <= 0) continue;
+              bands.push({ x: ra.left, y: ra.bottom, w: ra.width, h: h2, value: rowGap });
+            }
+          }
+        }
+      } else {
+        var direction = cs.flexDirection || "row";
+        var isColumn = direction.indexOf("column") !== -1;
+        var gapValue = isColumn ? parseFloat(cs.rowGap) || 0 : parseFloat(cs.columnGap) || 0;
+        if (gapValue > 0) {
+          for (var i = 0; i < children.length - 1; i++) {
+            var a = children[i].getBoundingClientRect();
+            var b = children[i + 1].getBoundingClientRect();
+            if (isColumn) {
+              var gapTop = a.bottom, gapBottom = b.top;
+              if (gapBottom - gapTop <= 0) continue;
+              bands.push({ x: innerLeft, y: gapTop, w: Math.max(0, innerRight - innerLeft), h: gapBottom - gapTop, value: gapValue });
+            } else {
+              var gapLeft = a.right, gapRight = b.left;
+              if (gapRight - gapLeft <= 0) continue;
+              bands.push({ x: gapLeft, y: innerTop, w: gapRight - gapLeft, h: Math.max(0, innerBottom - innerTop), value: gapValue });
+            }
+          }
+        }
       }
+
+      bands.forEach(function (b, idx) {
+        var band = getGapBand(idx);
+        band.el.style.display = "flex";
+        band.el.style.left = b.x + "px";
+        band.el.style.top = b.y + "px";
+        band.el.style.width = b.w + "px";
+        band.el.style.height = b.h + "px";
+        band.label.textContent = Math.round(b.value * 10) / 10;
+      });
     }
 
     var current = null;
