@@ -10,5 +10,11 @@
     "title": "Delhivery Local",
     "subtitle": "Landing page",
     "path": "pages/delhivery-local/index.html"
+  },
+  {
+    "id": "services",
+    "title": "Services",
+    "subtitle": "Pages with detailed cards",
+    "path": "pages/services/index.html"
   }
 ]

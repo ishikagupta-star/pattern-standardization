@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="../../inspector.css" />
+</head>
+<body>
+
+<div class="page">
+
+  <header class="topnav" data-spec="Top navigation bar">
+    <div class="topnav__brand">
+      <img class="logo-dlv" src="assets/dlv.svg" alt="Delhivery" />
+      <img class="logo-one" src="assets/group1991.svg" alt="One" />
+    </div>
+    <div class="search" data-spec="Search field">
+      <img src="assets/search.svg" alt="" />
+      <span>Search</span>
+    </div>
+    <div class="topnav__actions">
+      <button class="btn-ghost">Tasks</button>
+      <button class="icon-btn filled"><img src="assets/settings.svg" alt="" /></button>
+      <button class="icon-btn"><img src="assets/helpOutline.svg" alt="" /></button>
+    </div>
+    <div class="profile" data-spec="Profile">
+      <div class="avatar">
+        <div class="avatar__circle">JS</div>
+        <img class="avatar__status" src="assets/avatarStatus.svg" alt="" />
+      </div>
+      <div class="profile__meta">
+        <span class="profile__name">Jhonathan Smith</span>
+        <span class="profile__tag">Domestic</span>
+      </div>
+      <img class="chevron" src="assets/chevronDown.svg" alt="" />
+    </div>
+  </header>
+
+  <div class="body" data-spec="Page gutters (right 16 · bottom 24)">
+    <nav class="sidenav" data-spec="Left navigation sidebar">
+      <button class="nav-cell" aria-label="Home"><span class="nav-icon" style="-webkit-mask-image:url('assets/navHome.svg');mask-image:url('assets/navHome.svg');"></span></button>
+      <button class="nav-cell" aria-label="Inbox"><span class="nav-icon" style="-webkit-mask-image:url('assets/navInbox.svg');mask-image:url('assets/navInbox.svg');"></span></button>
+      <button class="nav-cell" aria-label="All inbox"><span class="nav-icon" style="-webkit-mask-image:url('assets/navAllInbox.svg');mask-image:url('assets/navAllInbox.svg');"></span></button>
+      <button class="nav-cell" aria-label="Recent"><span class="nav-icon" style="-webkit-mask-image:url('assets/navAccessTime.svg');mask-image:url('assets/navAccessTime.svg');"></span></button>
+      <button class="nav-cell" aria-label="Billing"><span class="nav-icon" style="-webkit-mask-image:url('assets/navMonetization.svg');mask-image:url('assets/navMonetization.svg');"></span></button>
+      <button class="nav-cell" aria-label="Support"><span class="nav-icon" style="-webkit-mask-image:url('assets/navLiveHelp.svg');mask-image:url('assets/navLiveHelp.svg');"></span></button>
+      <button class="nav-cell" aria-label="Dock"><span class="nav-icon" style="-webkit-mask-image:url('assets/navDock.svg');mask-image:url('assets/navDock.svg');"></span></button>
+      <button class="nav-cell" aria-label="Info"><span class="nav-icon" style="-webkit-mask-image:url('assets/navInfo.svg');mask-image:url('assets/navInfo.svg');"></span></button>
+      <button class="nav-cell is-selected" data-spec="Selected nav item" aria-current="page" aria-label="Services"><span class="nav-icon" style="-webkit-mask-image:url('assets/navDeviceHub.svg');mask-image:url('assets/navDeviceHub.svg');"></span></button>
+      <button class="nav-cell" aria-label="Settings"><span class="nav-icon" style="-webkit-mask-image:url('assets/navSettings.svg');mask-image:url('assets/navSettings.svg');"></span></button>
+    </nav>
+
+    <main class="content" data-spec="Content card (wraps every section)">
+      <div class="main-card">
+
+        <div class="page-header" data-spec="Page title row">
+          <div class="page-header__icon" data-spec="Page title icon">
+            <img src="assets/titleIcon.svg" alt="" />
+          </div>
+          <h1 class="page-header__title">Services</h1>
+        </div>
+
+        <div class="groups" data-spec="Group spacing (16px)">
+
+          <div class="group">
+            <div class="section-header" data-spec="Group heading">
+              <h2 class="section-header__title">Logistics Services</h2>
+            </div>
+
+            <div class="card-grid" data-spec="Card grid (3 equal columns, 24px gap)">
+              <article class="card" data-spec="Service card (430px, radius 12, 0.5px border)">
+                <div class="card__slot">
+                  <div class="card__top" data-spec="Inside the service card">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-local-delivery" src="assets/illus-local-delivery.svg" alt="Local delivery" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--info">New</span>
+                        <span class="badge badge--success">Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts">
+                      <p class="card__title">Local delivery</p>
+                      <p class="card__desc">On-demand bikes, three-wheelers, and trucks for same-city deliveries. Fast, flexible, point-to-point delivery solutions for local businesses that can&rsquo;t afford delays.</p>
+                      <span class="badge badge--cardbox"><strong>5k+ business</strong>&nbsp;are already using this service</span>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">Ship now <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card__slot">
+                  <div class="card__top">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-b2b-truck" src="assets/illus-b2b-truck.svg" alt="B2B Part Truckload" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--success">Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts">
+                      <p class="card__title">B2B Part Truckload</p>
+                      <p class="card__desc">India&rsquo;s most reliable Part Truck Load (PTL) service built for businesses that need bulk cargo moved fast across cities.</p>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">Ship now <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card__slot">
+                  <div class="card__top">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-international" src="assets/illus-international.svg" alt="International" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--success">Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts">
+                      <p class="card__title">International</p>
+                      <p class="card__desc">Ship to 220+ countries with full door-to-door tracking and customs clearance handled for you.</p>
+                      <span class="badge badge--cardbox"><strong>250+ business</strong>&nbsp;are already shipping internationally</span>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">Ship now <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card__slot">
+                  <div class="card__top">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-b2c-parcel" src="assets/illus-b2c-parcel.png" alt="B2C Express Parcel" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--success">Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts">
+                      <p class="card__title">B2C Express Parcel</p>
+                      <p class="card__desc">Deliver to the remotest corners of India with lightning-fast COD remittances. India&rsquo;s largest and most trusted logistics network.</p>
+                      <span class="badge badge--cardbox">Deliver to&nbsp;<strong>18,800+ pin codes</strong>&nbsp;across India</span>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">Ship now <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="group">
+            <div class="section-header">
+              <h2 class="section-header__title">Value Added Services</h2>
+            </div>
+
+            <div class="card-grid">
+              <article class="card">
+                <div class="card__slot">
+                  <div class="card__top">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-smart-ndr" src="assets/illus-smart-ndr.png" alt="Smart NDR" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--info">New</span>
+                        <span class="badge badge--success">Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts">
+                      <p class="card__title">Smart NDR</p>
+                      <p class="card__desc">Reduce COD RTO with AI-powered NDR automation using AI calls, WhatsApp confirmations, and FE call insights with smart reattempts and return recommendations.</p>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">View details <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card__slot">
+                  <div class="card__top">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-delhivery-protect" src="assets/illus-delhivery-protect.svg" alt="Delhivery Protect" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--success">Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts">
+                      <p class="card__title">Delhivery Protect</p>
+                      <p class="card__desc">Be stress free and get financial coverage up to Rs. 30,000 per shipment against in-transit loss &amp; damage at market best rates.</p>
+                      <div class="card__badges" style="gap:8px;">
+                        <span class="badge badge--cardbox"><strong>4k+ business</strong>&nbsp;use this service</span>
+                        <span class="badge badge--cardbox">Made for&nbsp;<strong>SME &amp; D2C</strong></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">View details <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card__slot">
+                  <div class="card__top">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-whatsapp" src="assets/illus-whatsapp.svg" alt="Whatsapp Communication" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--success">Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts">
+                      <p class="card__title">Whatsapp Communication</p>
+                      <p class="card__desc">Improve delivery success by keeping your customers informed with real-time shipment updates.</p>
+                      <span class="badge badge--cardbox"><strong>10k+</strong>&nbsp;similar to your business are using this service</span>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">View details <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card__slot">
+                  <div class="card__top">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-channel-integration" src="assets/illus-channel-integration.svg" alt="Channel Integration" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--success">2 Channels Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts">
+                      <p class="card__title">Channel Integration</p>
+                      <p class="card__desc">Connect your online ecommerce accounts like Shopify, WooCommerce store or Amazon and get your orders, and customer updates automatically without any manual entry.</p>
+                      <span class="badge badge--cardbox"><strong>Zero manual</strong>&nbsp;order entry</span>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">View details <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card__slot">
+                  <div class="card__top">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-rto-predictor" src="assets/illus-rto-predictor.svg" alt="RTO Predictor" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--success">Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts">
+                      <p class="card__title">RTO Predictor</p>
+                      <p class="card__desc">Artificial Intelligence identifies high-risk orders, enabling you to prevent expensive returns prior to shipping.</p>
+                      <span class="badge badge--cardbox"><strong>Reduce</strong>&nbsp;return losses</span>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">View details <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card__slot">
+                  <div class="card__top">
+                    <div class="card__banner-row">
+                      <div class="card__banner"><img class="icon-order-management" src="assets/illus-order-management.svg" alt="Order Management" /></div>
+                      <div class="card__badges">
+                        <span class="badge badge--success">Active</span>
+                      </div>
+                    </div>
+                    <div class="card__texts" style="gap:0;">
+                      <p class="card__title">Order Management</p>
+                      <p class="card__desc">Manage and review all your orders in one place before shipping them out.</p>
+                    </div>
+                  </div>
+                  <div class="card__buttons">
+                    <button class="button">View details <img src="assets/chevronRight.svg" alt="" /></button>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../inspector.js"></script>
+</body>
+</html>
