@@ -141,7 +141,19 @@ img { display: block; }
 .nav-cell.is-selected { background: var(--surface-coal-subtle); }
 .sidenav__bottom { display: flex; flex-direction: column; gap: 8px; flex: 1 0 0; justify-content: flex-end; }
 
-.content { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+/* The whole breadcrumb+hero+benefits+footer stack is wrapped in ONE card
+   in Figma (rounded-[12px] all corners + overflow-clip + a subtle drop
+   shadow) — missed earlier because only the individual sections inside
+   it were ever fetched, never this wrapping frame itself. */
+.content {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-large);
+  overflow: hidden;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+}
 
 /* ===================== Breadcrumb ===================== */
 
